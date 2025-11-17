@@ -1,0 +1,4 @@
+Scenario,Active Borrowers,Default Rate (%),Monthly Profit ($),NPV ($)
+Optimistic,22000,4.5,"$-8,800.00","$-4,774,440.83"
+Base Case,20000,6.0,"$-72,000.00","$-6,745,425.01"
+Pessimistic,18000,7.8,"$-131,040.00","$-8,586,673.51"

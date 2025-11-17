@@ -1,0 +1,8 @@
+Feature,Coefficient
+Cashflow_Volatility_Ratio,0.3346642783961815
+Avg_Payment_Speed_Days,0.06410515639617535
+Unique_Loan_Count_TRAD,0.0
+Max_Days_in_Arrears_TRAD,-0.01722211260233631
+Days_Active_Platform,-0.02745022782968602
+Max_Utilization_TRAD,-0.03007483838339807
+Partner_Risk_Score,-0.045102294123107074
