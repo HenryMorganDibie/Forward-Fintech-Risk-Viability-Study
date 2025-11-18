@@ -111,5 +111,5 @@ print(f"Total rows: {len(df_combined)}")
 # Save the full and sample files
 df_combined.to_csv(FILE_COMBINED_OUTPUT, index=False)
 df_combined.head(1000).to_csv(FILE_SAMPLE_OUTPUT, index=False)
-print(f"\n✅ Full combined dataset saved to: {FILE_COMBINED_OUTPUT}")
-print(f"✅ Sample dataset saved to: {FILE_SAMPLE_OUTPUT} (1000 rows for quick checks)")
+print(f"\n Full combined dataset saved to: {FILE_COMBINED_OUTPUT}")
+print(f" Sample dataset saved to: {FILE_SAMPLE_OUTPUT} (1000 rows for quick checks)")

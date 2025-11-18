@@ -5,7 +5,41 @@
 
 ## 📌 Project Overview
 
-This repository contains the full quantitative analysis, modeling code, and strategic recommendations for assessing the financial and risk viability of Forward Fintech’s proposed **Chain Forward short-term value-chain lending product**.
+This repository contains the full quantitative analysis, modeling code, and strategic recommendations for assessing the financial and risk viability of Forward Fintech’s proposed **Chain Forward short-term value-chain lending product**. It includes:
+
+- A reproducible ETL and modeling pipeline
+
+- Integrated snapshot and simulated MSME datasets
+
+- Risk scoring, customer segmentation, and scenario simulations
+
+- Executive-ready dashboards and documentation
+
+- A clean, structured project directory
+
+The project supports strategic decision-making regarding risk, profitability, and portfolio viability.
+
+### Folder Structure
+
+<pre lang="markdown">
+Chain_Forward_Risk_Assessment/
+│
+├── 1_Presentation/
+│   ├── Chain Forward Profitability Analysis, Strategic Path to Viability.pbix
+│   └── Chain Forward Risk Assessment & Profitability Study.pptx
+│
+├── 2_Code_and_Data/
+│   ├── data/
+│   ├── outputs/
+│   └── src/
+│
+├── 3_Documentation/
+│   ├── Chain Forward Profitability Analysis, Strategic Path to Viability.pdf
+│   └── Model Governance and Strategic Roadmap.pdf
+│
+├── Readme.md
+└── run_full_pipeline.ps1
+</pre>
 
 **Core Finding:**
 
@@ -23,6 +57,50 @@ This repository contains the full quantitative analysis, modeling code, and stra
 | Current Expected Default Rate | 6.00% | The product operates 2.25 percentage points above financial sustainability. |
 
 ---
+
+## 🔄 Automated Execution Pipeline
+
+To ensure reproducibility, the repository includes a PowerShell automation script:
+
+### **`run_full_pipeline.ps1`**
+
+This script executes the **entire Chain Forward Risk Assessment workflow** — from data preparation to full modeling and scenario analysis — in the correct order.
+
+### ✅ What It Does
+
+- Loads and validates paths to all Python scripts  
+- Executes:
+  1. **Data Combination & Feature Engineering**
+  2. **Risk Modeling, Segmentation & Scenario Analysis**
+- Automatically stops if any step fails  
+- Saves all outputs to: 2_Code_and_Data/outputs
+
+---
+
+### ▶️ How to Run
+
+From the project root:
+
+```bash
+.\run_full_pipeline.ps1
+```
+### 📂 Pipeline Flow
+
+<pre lang="markdown">
+run_full_pipeline.ps1
+│
+├── STEP 1 → data_combination_pipeline.py
+│       • Load data
+│       • Clean & engineer features
+│       • Export final combined dataset
+│
+└── STEP 2 → chain_forward_risk_model.py
+        • K-means segmentation
+        • Logistic regression modeling
+        • Profitability & NPV analysis
+        • Scenario stress-testing
+        • Output generation
+</pre>
 
 ## 🧭 Methodology: End-to-End Risk Assessment Framework
 
