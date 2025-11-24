@@ -174,7 +174,7 @@ Runs the entire workflow end-to-end.
 ```bash
 .\run_full_pipeline.ps1
 ```
-
+---
 
 ### 📂 Pipeline Flow
 
@@ -193,79 +193,6 @@ run_full_pipeline.ps1
         • Scenario stress-testing
         • Output generation
 </pre>
-
-## 🧭 Methodology: End-to-End Risk Assessment Framework
-
-The analysis followed a structured, four-pillar quantitative approach:
-
-### 1. Portfolio Viability Modeling
-- Calculated monthly profit, expected loss, and NPV across multiple scenarios (base, optimistic, pessimistic).  
-- Identified the exact financial gap and required default thresholds.
-
-### 2. Behavioral Risk Analytics
-Focused on:  
-- Cashflow volatility  
-- Payment speed  
-- Partner risk score  
-- Platform activity  
-
-Used to understand drivers of MSME default in short-term, high-frequency lending.
-
-### 3. Customer Segmentation (K-Means)
-- Clustered MSMEs into 3 risk groups.  
-- Identified where losses are concentrated.
-
-### 4. Default Prediction (Logistic Regression)
-- Measured feature importance and predicted risk.  
-- Validated behavioral variables as superior risk indicators.
-
----
-
-## 🔑 Key Analytical Findings
-
-### 1. Loss Concentration Is the Root Cause
-
-Nearly half of the borrowers belong to a **high-risk segment** that exceeds the break-even threshold.
-
-| Segment | Default Rate | Portfolio Share | Insight |
-|---------|--------------|----------------|--------|
-| Segment 1 (High Risk) | 6.66% | 48.5% | Primary driver of the −$72k monthly loss. |
-| Segment 0 (Medium Risk) | 5.29% | 51.4% | Still above break-even; requires moderate risk premium. |
-| Segment 2 (Low Risk) | 4.0% | <1% | Small but stable; potential “anchor borrowers.” |
-
-### 2. Cashflow Volatility Is the Dominant Risk Driver
-
-- **Cashflow_Volatility_Ratio** has the strongest positive coefficient (+0.3347)  
-- Payment speed also contributes to higher default probability  
-- Traditional credit variables (arrears, utilization) add minimal predictive lift  
-
-**Model Limit:**  
-`ROC AUC = 0.5962` → Weak rejection capability.  
-Pricing adjustments must occur before stricter modeling.
-
----
-
-## 🎯 Strategic Recommendations (Path to Viability)
-
-### 📌 Phase 1 — Immediate Pricing Adjustment
-**Objective:** Achieve positive monthly profit
-- Segment 1: Apply +35–45% interest premium  
-- Segment 0: Apply +10–15% premium  
-- Segment 2: Retain/offer preferential pricing to maintain quality borrowers
-
-### 📌 Phase 2 — Upgrade Risk Modeling
-**Objective:** Improve reject strategy
-- Move from Logistic Regression → XGBoost or LightGBM  
-- Target ROC AUC ≥ 0.70  
-- Integrate time-series patterns for better cashflow interpretation
-
-### 📌 Phase 3 — Operational Risk Controls
-**Objective:** Prevent risk drift and systemic losses
-- Deploy Cashflow Volatility Ratio as a primary decision rule  
-- Build Early Warning Indicators (EWI) on payment delays & partner dependency  
-- Monitor value-chain concentration to prevent cascade failures
-
----
 
 ## 📁 Repository Structure
 
