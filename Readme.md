@@ -208,8 +208,24 @@ run_full_pipeline.ps1
 
 ## 📊 Monitoring Dashboard (Post-Deployment)
 
-A live dashboard is available here:  
-[Governance Dashboard](http://localhost:8000/governance_dashboard.html)
+**File:** `4_Monitoring_Dashboard/governance_dashboard.html`
+
+### To view in browser (Python HTTP server method):
+
+1. Serve the folder from terminal:
+
+```bash
+cd 4_Monitoring_Dashboard
+python -m http.server 8000
+```
+
+2. Open your browser and navigate to:
+
+```bash
+http://localhost:8000/governance_dashboard.html
+```
+
+> ⚠️ Using forward slashes `/` in the URL is essential to avoid 404 errors from the server.
 
 ### ▶️ How to Use
 
