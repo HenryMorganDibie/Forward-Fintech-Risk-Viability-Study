@@ -173,6 +173,8 @@ Runs the entire workflow end-to-end.
 
 ```bash
 .\run_full_pipeline.ps1
+```
+
 
 ### 📂 Pipeline Flow
 
