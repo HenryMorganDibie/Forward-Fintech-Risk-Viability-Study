@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V3.0 Strategic Filter Governance Dashboard (Enhanced)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .card { background-color: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); transition: all 0.3s ease; }
+        .alert-red { background-color: #fef2f2; border-left: 5px solid #ef4444; }
+        .alert-yellow { background-color: #fffbeb; border-left: 5px solid #f59e0b; }
+        .alert-green { background-color: #f0fdf4; border-left: 5px solid #22c55e; }
+        .metric-value { font-size: 2.25rem; font-weight: 700; }
+        .btn-simulate { background-color: #10b981; }
+        .btn-simulate:hover { background-color: #059669; }
+        .input-group label { width: 150px; }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">V3.0 Risk Governance Dashboard</h1>
+            <p class="text-gray-500">Real-Time Monitoring of Strategic Filter Policy (EWIs vs. Framework V3.0)</p>
+        </header>
+
+        <!-- Current Status Message -->
+        <div id="status-card" class="card p-6 mb-8 alert-green">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">System Status: <span id="governance-status" class="text-green-600">Stable</span></h2>
+            <p id="status-message" class="text-gray-600">All Key Performance Indicators and Early Warning Indicators are within acceptable policy thresholds.</p>
+        </div>
+
+        <!-- KPI & EWI Display Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+
+            <!-- KPI 1: Effective Portfolio Yield (vs. Expected Loss) -->
+            <div class="card p-5">
+                <p class="text-sm font-medium text-gray-500">Effective Portfolio Yield</p>
+                <p id="kpi-yield" class="metric-value text-gray-900 mt-1">--</p>
+                <div class="mt-3">
+                    <span class="text-xs font-medium text-gray-500">Benchmark: &gt; <span id="yield-benchmark">--</span> (DR × LGD)</span>
+                </div>
+            </div>
+
+            <!-- EWI 1: Segment 1 Default Creep (Core Segment) -->
+            <div class="card p-5" id="e-segment1-card">
+                <p class="text-sm font-medium text-gray-500">EWI: Segment 1 Default Rate</p>
+                <p id="e-segment1-value" class="metric-value text-gray-900 mt-1">--</p>
+                <div class="mt-3">
+                    <span class="text-xs font-medium text-gray-500">Threshold: Exceeds 38.0% for 2 months</span>
+                </div>
+            </div>
+
+            <!-- EWI 2: Filter Over-Rejection -->
+            <div class="card p-5" id="e-overrejection-card">
+                <p class="text-sm font-medium text-gray-500">EWI: Filter Rejection Rate</p>
+                <p id="e-overrejection-value" class="metric-value text-gray-900 mt-1">--</p>
+                <div class="mt-3">
+                    <span class="text-xs font-medium text-gray-500">Threshold: Rises > 45.0%</span>
+                </div>
+            </div>
+            
+            <!-- EWI 3: Traditional Driver Shift (Max Days in Arrears) -->
+            <div class="card p-5" id="e-driver-shift-card">
+                <p class="text-sm font-medium text-gray-500">EWI: Traditional Driver Shift</p>
+                <p id="e-driver-shift-value" class="metric-value text-gray-900 mt-1">--</p>
+                <div class="mt-3">
+                    <span class="text-xs font-medium text-gray-500">Threshold: Shift > 1.5 SD</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulation and Controls -->
+        <div class="card p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Simulate Monitoring Inputs</h2>
+            <p class="text-gray-600 mb-4">Adjust the inputs below to see how the dashboard reacts to policy breaches (Red Alert) and warning zones (Yellow Alert).</p>
+
+            <div class="space-y-4">
+                <!-- Segment 1 Default Rate Control -->
+                <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 input-group">
+                    <label for="seg1-default-slider" class="text-sm font-medium text-gray-700">Segment 1 DR (30% - 45%)</label>
+                    <input type="range" id="seg1-default-slider" min="30" max="45" value="35.8" step="0.1" class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
+                    <span id="seg1-default-display" class="w-16 text-right text-lg font-semibold text-indigo-600">35.8%</span>
+                </div>
+
+                <!-- Rejection Rate Control -->
+                <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 input-group">
+                    <label for="rejection-rate-slider" class="text-sm font-medium text-gray-700">Filter Rejection Rate (30% - 50%)</label>
+                    <input type="range" id="rejection-rate-slider" min="30" max="50" value="40" step="0.1" class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
+                    <span id="rejection-rate-display" class="w-16 text-right text-lg font-semibold text-indigo-600">40.0%</span>
+                </div>
+
+                <!-- Portfolio Yield Control -->
+                <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 input-group">
+                    <label for="portfolio-yield-slider" class="text-sm font-medium text-gray-700">Portfolio Yield (3.0% - 6.0%)</label>
+                    <input type="range" id="portfolio-yield-slider" min="3" max="6" value="5.0" step="0.1" class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
+                    <span id="portfolio-yield-display" class="w-16 text-right text-lg font-semibold text-indigo-600">5.0%</span>
+                </div>
+                
+                <!-- Traditional Driver Shift Control (Simulating Max Days in Arrears Shift) -->
+                <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 input-group">
+                    <label for="driver-shift-slider" class="text-sm font-medium text-gray-700">Driver Shift (SDs from Mean)</label>
+                    <input type="range" id="driver-shift-slider" min="0" max="2" value="0.5" step="0.1" class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
+                    <span id="driver-shift-display" class="w-16 text-right text-lg font-semibold text-indigo-600">0.5 SD</span>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="runGovernanceCheck(true)" class="btn-simulate text-white py-2 px-4 rounded-lg font-semibold shadow-md hover:shadow-lg transition duration-150">
+                    Run Governance Check (Simulate Month End)
+                </button>
+                <button onclick="resetSimulation()" class="ml-4 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition duration-150">
+                    Reset to Baseline
+                </button>
+            </div>
+        </div>
+
+        <!-- Historical Data View -->
+        <div class="card p-6 mt-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Historical Seg 1 DR (Last 3 Months)</h3>
+            <p id="historical-data-view" class="font-mono text-sm text-gray-600"></p>
+        </div>
+    </div>
+
+    <script>
+        // --- CONSTANTS & THRESHOLDS (From Framework V3.0) ---
+        const THRESHOLDS = {
+            SEGMENT_1_DR_MAX: 0.38, // Segment 1 DR must not exceed 38% for two months
+            SEGMENT_2_DR_MAX: 0.68, // Segment 2 DR must not exceed 68% for two months (Mocked for now)
+            REJECTION_RATE_BASE: 0.40, // Base Rejection Rate 40%
+            REJECTION_RATE_OVERREJECT_MAX: 0.45, // Rejection Rate must not exceed 45% (40% + 5%)
+            DRIVER_SHIFT_MAX_SD: 1.5, // Traditional Driver Shift must not exceed 1.5 SD
+            LGD: 0.50, // Loss Given Default for expected loss calculation
+            PORTFOLIO_DEFAULT_RATE: 0.045 // Mock Post-Filter Portfolio Default Rate
+        };
+
+        // Simulated historical data to enforce the "two months" rule
+        // Last 3 months (Index 0 is oldest, Index 2 is newest)
+        let historicalSeg1DefaultRates = [0.358, 0.365, 0.359]; 
+        let historicalSeg2DefaultRates = [0.601, 0.610, 0.612];
+
+        // --- Data Simulation (Current Real-Time Inputs) ---
+        let currentSeg1DR = 0.358;
+        let currentRejectionRate = 0.40;
+        let currentPortfolioYield = 0.050;
+        let currentDriverShiftSD = 0.5;
+        let currentSeg2DR = 0.612; // Placeholder for Segment 2 DR
+
+        // --- DOM Elements ---
+        const statusCard = document.getElementById('status-card');
+        const governanceStatus = document.getElementById('governance-status');
+        const statusMessage = document.getElementById('status-message');
+
+        const kpiYield = document.getElementById('kpi-yield');
+        const yieldBenchmarkText = document.getElementById('yield-benchmark');
+        const eSegment1Value = document.getElementById('e-segment1-value');
+        const eOverrejectionValue = document.getElementById('e-overrejection-value');
+        const eDriverShiftValue = document.getElementById('e-driver-shift-value');
+
+        const seg1DefaultSlider = document.getElementById('seg1-default-slider');
+        const seg1DefaultDisplay = document.getElementById('seg1-default-display');
+        const rejectionRateSlider = document.getElementById('rejection-rate-slider');
+        const rejectionRateDisplay = document.getElementById('rejection-rate-display');
+        const portfolioYieldSlider = document.getElementById('portfolio-yield-slider');
+        const portfolioYieldDisplay = document.getElementById('portfolio-yield-display');
+        const driverShiftSlider = document.getElementById('driver-shift-slider');
+        const driverShiftDisplay = document.getElementById('driver-shift-display');
+        const historicalDataView = document.getElementById('historical-data-view');
+
+
+        // --- Event Listeners for Controls ---
+        seg1DefaultSlider.addEventListener('input', (e) => {
+            currentSeg1DR = parseFloat(e.target.value) / 100;
+            seg1DefaultDisplay.textContent = (currentSeg1DR * 100).toFixed(1) + '%';
+            // Simple logic: If Seg 1 is getting worse, Seg 2 is also getting worse (but slower)
+            currentSeg2DR = Math.min(THRESHOLDS.SEGMENT_2_DR_MAX + 0.05, currentSeg1DR * 1.7); 
+            runGovernanceCheck();
+        });
+
+        rejectionRateSlider.addEventListener('input', (e) => {
+            currentRejectionRate = parseFloat(e.target.value) / 100;
+            rejectionRateDisplay.textContent = (currentRejectionRate * 100).toFixed(1) + '%';
+            runGovernanceCheck();
+        });
+
+        portfolioYieldSlider.addEventListener('input', (e) => {
+            currentPortfolioYield = parseFloat(e.target.value) / 100;
+            portfolioYieldDisplay.textContent = (currentPortfolioYield * 100).toFixed(1) + '%';
+            runGovernanceCheck();
+        });
+        
+        driverShiftSlider.addEventListener('input', (e) => {
+            currentDriverShiftSD = parseFloat(e.target.value);
+            driverShiftDisplay.textContent = currentDriverShiftSD.toFixed(1) + ' SD';
+            runGovernanceCheck();
+        });
+
+
+        /**
+         * Cleans up the status card classes and applies the new class.
+         */
+        function updateStatusCard(className) {
+            statusCard.classList.remove('alert-green', 'alert-yellow', 'alert-red');
+            statusCard.classList.add(className);
+        }
+
+        /**
+         * Formats a number as a percentage string.
+         */
+        const formatPercent = (value) => (value * 100).toFixed(1) + '%';
+
+        /**
+         * Main function to run all governance checks against V3.0 policy thresholds.
+         * @param {boolean} updateHistory - Whether to push the current DR to history (Simulate month-end update).
+         */
+        function runGovernanceCheck(updateHistory = false) {
+            let alerts = [];
+
+            // --- 0. Update Historical Data and Current Display Metrics ---
+            if (updateHistory) {
+                // Shift the history arrays, discarding the oldest month
+                historicalSeg1DefaultRates.shift();
+                historicalSeg2DefaultRates.shift();
+                
+                // Add the current values to the end (Most recent month)
+                historicalSeg1DefaultRates.push(currentSeg1DR);
+                historicalSeg2DefaultRates.push(currentSeg2DR);
+            }
+
+            // Update display metrics
+            kpiYield.textContent = formatPercent(currentPortfolioYield);
+            eSegment1Value.textContent = formatPercent(currentSeg1DR);
+            eOverrejectionValue.textContent = formatPercent(currentRejectionRate);
+            eDriverShiftValue.textContent = currentDriverShiftSD.toFixed(1) + ' SD';
+
+            const yieldBenchmark = THRESHOLDS.PORTFOLIO_DEFAULT_RATE * THRESHOLDS.LGD;
+            yieldBenchmarkText.textContent = formatPercent(yieldBenchmark);
+            historicalDataView.textContent = `Seg 1 DR: [${historicalSeg1DefaultRates.map(formatPercent).join(', ')}] | Seg 2 DR: [${historicalSeg2DefaultRates.map(formatPercent).join(', ')}]`;
+
+
+            // --- KPI Check: Effective Portfolio Yield (Long-term viability) ---
+            if (currentPortfolioYield <= yieldBenchmark) {
+                alerts.push(`**KPI BREACH (Yield)**: Effective Yield (${formatPercent(currentPortfolioYield)}) is NOT exceeding the expected loss (${formatPercent(yieldBenchmark)}). **Action Trigger**: Full Business Review.`);
+            }
+
+            // --- EWI Check 1: Segment 1 Default Creep (Two-Month Rule) ---
+            const seg1Breaches = historicalSeg1DefaultRates.filter(rate => rate > THRESHOLDS.SEGMENT_1_DR_MAX);
+            if (seg1Breaches.length >= 2) {
+                alerts.push(`**EWI TRIGGER (Seg 1 Creep)**: Segment 1 DR has exceeded ${formatPercent(THRESHOLDS.SEGMENT_1_DR_MAX)} for ${seg1Breaches.length} months. **Action Trigger**: Strategy Review.`);
+            }
+
+            // --- EWI Check 2: Segment 2 Default Creep (Two-Month Rule) ---
+            const seg2Breaches = historicalSeg2DefaultRates.filter(rate => rate > THRESHOLDS.SEGMENT_2_DR_MAX);
+            if (seg2Breaches.length >= 2) {
+                alerts.push(`**EWI TRIGGER (Seg 2 Creep)**: Segment 2 DR has exceeded ${formatPercent(THRESHOLDS.SEGMENT_2_DR_MAX)} for ${seg2Breaches.length} months. **Action Trigger**: Filter Tightening.`);
+            }
+
+            // --- EWI Check 3: Filter Over-Rejection ---
+            if (currentRejectionRate > THRESHOLDS.REJECTION_RATE_OVERREJECT_MAX) {
+                alerts.push(`**EWI TRIGGER (Over-Rejection)**: Rejection Rate (${formatPercent(currentRejectionRate)}) exceeds ${formatPercent(THRESHOLDS.REJECTION_RATE_OVERREJECT_MAX)}. **Action Trigger**: Business Review (Investigate sudden volume drop).`);
+            }
+            
+            // --- EWI Check 4: Traditional Driver Shift ---
+            if (currentDriverShiftSD > THRESHOLDS.DRIVER_SHIFT_MAX_SD) {
+                alerts.push(`**EWI TRIGGER (Driver Shift)**: Max Days in Arrears shift (${currentDriverShiftSD.toFixed(1)} SD) exceeds 1.5 SD. **Action Trigger**: Model Review (Investigate market drift/reporting change).`);
+            }
+
+
+            // --- Final Status Update & Coloring ---
+            if (alerts.length > 0) {
+                updateStatusCard('alert-red');
+                governanceStatus.textContent = `CRITICAL ALERT: ${alerts.length} Policy Breaches`;
+                statusMessage.innerHTML = `**IMMEDIATE ACTION REQUIRED** based on V3.0 Framework:\n<ul class="list-disc ml-5 mt-2 space-y-1">${alerts.map(a => `<li>${a}</li>`).join('')}</ul>`;
+            } else if (
+                // Check for being in a warning zone (e.g., within 2% of default triggers, or 0.2 SD of shift trigger)
+                currentSeg1DR > (THRESHOLDS.SEGMENT_1_DR_MAX - 0.02) || 
+                currentSeg2DR > (THRESHOLDS.SEGMENT_2_DR_MAX - 0.02) ||
+                currentRejectionRate > (THRESHOLDS.REJECTION_RATE_OVERREJECT_MAX - 0.02) ||
+                currentDriverShiftSD > (THRESHOLDS.DRIVER_SHIFT_MAX_SD - 0.2)
+                ) {
+                updateStatusCard('alert-yellow');
+                governanceStatus.textContent = 'Warning Zone - Monitor Closely';
+                statusMessage.textContent = 'One or more metrics are approaching Early Warning Indicators. Continue close monitoring and prepare contingency actions.';
+            } else {
+                updateStatusCard('alert-green');
+                governanceStatus.textContent = 'Stable';
+                statusMessage.textContent = 'All Key Performance Indicators and Early Warning Indicators are within acceptable policy thresholds.';
+            }
+        }
+
+        /** Resets all simulated data to initial framework values (Base Case). */
+        function resetSimulation() {
+            // Reset current values
+            currentSeg1DR = 0.358;
+            currentRejectionRate = 0.40;
+            currentPortfolioYield = 0.050;
+            currentDriverShiftSD = 0.5;
+            currentSeg2DR = 0.612;
+            
+            // Reset historical data to stable, compliant figures
+            historicalSeg1DefaultRates = [0.358, 0.365, 0.359];
+            historicalSeg2DefaultRates = [0.601, 0.610, 0.612];
+
+            // Reset UI sliders
+            seg1DefaultSlider.value = (currentSeg1DR * 100).toFixed(1);
+            seg1DefaultDisplay.textContent = (currentSeg1DR * 100).toFixed(1) + '%';
+            rejectionRateSlider.value = (currentRejectionRate * 100).toFixed(1);
+            rejectionRateDisplay.textContent = (currentRejectionRate * 100).toFixed(1) + '%';
+            portfolioYieldSlider.value = (currentPortfolioYield * 100).toFixed(1);
+            portfolioYieldDisplay.textContent = (currentPortfolioYield * 100).toFixed(1) + '%';
+            driverShiftSlider.value = currentDriverShiftSD.toFixed(1);
+            driverShiftDisplay.textContent = currentDriverShiftSD.toFixed(1) + ' SD';
+
+            // Run check to update the status
+            runGovernanceCheck();
+        }
+
+        // Initialize the dashboard on load
+        window.onload = resetSimulation;
+
+    </script>
+
+</body>
+</html>
