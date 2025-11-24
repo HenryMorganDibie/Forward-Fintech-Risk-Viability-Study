@@ -184,15 +184,45 @@ run_full_pipeline.ps1
 ├── STEP 1 → data_combination_pipeline.py
 │       • Load data
 │       • Clean & engineer features
-│       • Export final combined dataset
+│       • Export initial combined dataset
 │
-└── STEP 2 → chain_forward_risk_model.py
-        • K-means segmentation
-        • Logistic regression modeling
-        • Profitability & NPV analysis
-        • Scenario stress-testing
-        • Output generation
+├── STEP 2 → data_combination_pipeline_v2.0.py
+│       • Refine feature engineering
+│       • Apply V3.0 target definition
+│       • Export final combined dataset for modeling
+│
+├── STEP 3 → chain_forward_risk_model.py
+│       • K-means segmentation
+│       • Logistic regression modeling
+│       • Profitability & NPV analysis
+│       • Scenario stress-testing
+│       • Output generation
+│
+└── STEP 4 → risk_modeling_pipeline_v2.0.py
+        • Model validation and fine-tuning
+        • Scenario and stress-test replication
+        • Final output generation for monitoring
 </pre>
+
+---
+
+## 📊 Monitoring Dashboard (Post-Deployment)
+
+A live dashboard is available here:  
+[Governance Dashboard](http://localhost:8000/governance_dashboard.html)
+
+### ▶️ How to Use
+
+1. Open the link in a web browser.  
+2. Navigate through tabs to review:  
+   - Portfolio segmentation and risk exposure  
+   - Feature importance and model explainability  
+   - Scenario stress-testing outcomes  
+3. Use this dashboard for executive reporting and governance purposes.  
+
+This allows non-technical stakeholders to monitor portfolio health and model performance without needing to run scripts.
+
+---
 
 ## 📁 Repository Structure
 
